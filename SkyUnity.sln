@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyUnityLauncher", "SkyUnit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyUnityServer", "SkyUnityServer\SkyUnityServer.csproj", "{BD0480B4-30AD-4948-B607-644B950304A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyUnityData", "SkyUnityData\SkyUnityData.csproj", "{1BB54E79-C073-4A9B-8D58-12D8D8D446C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkyUnityCore", "SkyUnityData\SkyUnityCore.csproj", "{1BB54E79-C073-4A9B-8D58-12D8D8D446C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
