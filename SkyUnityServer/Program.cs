@@ -2,8 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SkyUnityCore.Repositories;
 using SkyUnityServer;
 using SkyUnityServer.Extensions;
+using SkyUnityServer.Services;
 
 try
 {
@@ -29,6 +31,8 @@ static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilde
         services.BuildServiceProvider();
 
         services.AddDatabase(context.Configuration);
+        services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IUserService, UserService>();
         services.AddSingleton<SkyUnityTPCServer>();
     }).ConfigureLogging(logging =>
     {
