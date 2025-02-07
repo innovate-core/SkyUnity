@@ -1,10 +1,12 @@
-﻿using SkyUnityCore.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SkyUnityCore.Entities;
 
 namespace SkyUnityCore.Repositories;
 
 public interface IUserRepository
 {
     Task Insert(User user);
+    Task<bool> ExistNameAsync(string name);
 }
 
 public class UserRepository : IUserRepository
@@ -14,6 +16,11 @@ public class UserRepository : IUserRepository
     public UserRepository(AppDbContext context)
     {
         _context = context;
+    }
+
+    public async Task<bool> ExistNameAsync(string name)
+    {
+        return await _context.Users.AnyAsync(u => u.Name == name);
     }
 
     public async Task Insert(User user)

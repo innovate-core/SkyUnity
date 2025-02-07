@@ -1,4 +1,6 @@
-﻿namespace SkyUnityLauncher;
+﻿using SkyUnityCore.Dto;
+
+namespace SkyUnityLauncher;
 
 public partial class Launcher : Form
 {
@@ -11,6 +13,7 @@ public partial class Launcher : Form
     {
         var tcpClientHandler = new TcpClientHandler();
 
-        await tcpClientHandler.RegisterUser("TestName", "TestEmail", "TestPassword");
+        var user = new UserDto() { Email = "admin", Password = "0000", Name = "admin", };
+        await tcpClientHandler.RegisterUser(user);
     }
 }

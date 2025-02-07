@@ -1,5 +1,9 @@
-﻿using System.Net.Sockets;
+﻿using Newtonsoft.Json;
+using SkyUnityCore.Dto;
+using SkyUnityCore.Enums;
+using System.Net.Sockets;
 using System.Text;
+using System.Text.Json.Nodes;
 
 namespace SkyUnityLauncher;
 
@@ -8,7 +12,7 @@ public class TcpClientHandler
     private readonly string _serverIp = "127.0.0.1";
     private readonly int _serverPort = 12345;
 
-    public async Task<string> RegisterUser(string name, string email, string password)
+    public async Task<string> RegisterUser(UserDto userDto)
     {
         try
         {
@@ -18,8 +22,11 @@ public class TcpClientHandler
                 NetworkStream stream = client.GetStream();
 
                 // Формуємо JSON для передачі
-                string requestData = $"REGISTER|{name}|{email}|{password}";
-                byte[] requestBytes = Encoding.UTF8.GetBytes(requestData);
+                var requestData = new RequestTPC<UserDto>() { Model = userDto, Type = ServiceType.Register };
+
+                var str = JsonConvert.SerializeObject(requestData);
+
+                byte[] requestBytes = Encoding.UTF8.GetBytes(str);
 
                 await stream.WriteAsync(requestBytes, 0, requestBytes.Length);
 

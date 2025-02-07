@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="assets\infocard-3O7HD6AS.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

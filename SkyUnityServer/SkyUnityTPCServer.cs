@@ -1,4 +1,5 @@
-﻿using SkyUnityCore.Dto;
+﻿using Newtonsoft.Json;
+using SkyUnityCore.Dto;
 using SkyUnityServer.Services;
 using System.Net;
 using System.Net.Sockets;
@@ -19,7 +20,7 @@ public class SkyUnityTPCServer
         _userService = userService;
     }
 
-    public void Start()
+    public async void Start()
     {
         _listener.Start();
 
@@ -33,7 +34,7 @@ public class SkyUnityTPCServer
             int bytesRead = stream.Read(requestBuffer, 0, requestBuffer.Length);
             string requestMessage = Encoding.UTF8.GetString(requestBuffer, 0, bytesRead);
 
-            string responseMessage = HandleRequest(requestMessage);
+            string responseMessage = await HandleRequest(requestMessage);
 
             byte[] responseBuffer = Encoding.UTF8.GetBytes(responseMessage);
             stream.Write(responseBuffer, 0, responseBuffer.Length);
@@ -43,21 +44,20 @@ public class SkyUnityTPCServer
         }
     }
 
-    private string HandleRequest(string request)
+    private async Task<string> HandleRequest(string request)
     {
         try
         {
-            string[] parts = request.Split('|');
-            if (parts.Length < 4 || parts[0] != "REGISTER")
-                return "Invalid request format.";
+            var response = JsonConvert.DeserializeObject<RequestTPC<UserDto>>(request);
 
-            string name = parts[1];
-            string email = parts[2];
-            string password = parts[3];
+            if (!await _userService.ExistAsync(response.Model.Name))
+            {
+                Task<bool> result = _userService.RegisterAsync(response.Model);
 
-            Task<bool> result = _userService.RegisterAsync(new UserDto { Name = name, Email = email, Password = password });
+                return result.Result ? "Registration successful" : "Registration failed";
+            }
 
-            return result.Result ? "Registration successful" : "Registration failed";
+            return "User exist";
         }
         catch (Exception ex)
         {
